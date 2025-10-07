@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth.js";
+import vaultRoutes from "./routes/vault.js";
+import authMiddleware from "./middleware/authMiddleware.js";
 
 
 dotenv.config();
@@ -12,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/vault", authMiddleware, vaultRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))
@@ -22,6 +25,4 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 
-app.get("/api/hello", (req, res) => {
-  res.send("API is running...");
-});
+
